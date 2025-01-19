@@ -45,7 +45,7 @@ function Home() {
           
         {/* Add the top 3 leaderboard */}
         <BarGraph limit={3} />
-          <a href="/dashboard">
+          <a href="/CrocodileMiniApp/dashboard">
             <button className="start-button">
               Under development <FaArrowRightLong color="#1b1b1b" size={22} />
             </button>
