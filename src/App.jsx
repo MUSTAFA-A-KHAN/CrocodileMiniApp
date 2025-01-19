@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import AccountWrapper from "./hooks/useAccount";
 import Animate from "./utils/Animate";
+import BarGraph from "./pages/Dashboard/components/BarGraph";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
             <Routes>
               <Route path="/CrocodileMiniApp" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/CrocodileMiniApp/Bargraph" element={<BarGraph />} />
             </Routes>
           </Animate>
         </AccountWrapper>
