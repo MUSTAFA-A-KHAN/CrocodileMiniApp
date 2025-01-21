@@ -73,7 +73,8 @@ function Home() {
                   {userData.map((user) => (
                     <li key={user._id}>
                       <strong>Name:</strong> {user.Name} <br />
-                      <strong>Count:</strong> {user.count}
+                      <strong>Count:</strong> {user.count}<br />
+                      <strong>Rank:</strong> {user.rank}
                     </li>
                   ))}
                 </ul>
