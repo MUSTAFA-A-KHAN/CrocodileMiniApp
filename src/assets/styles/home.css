@@ -5,21 +5,21 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 20px;
-  background-color: #ffd3e0; /* Softer pink */
+  padding: 20px 0;
+  background-color: #ffe6ee; /* Softer, playful pink */
 }
 
 .header-title {
   text-align: center;
-  font-size: 28px; /* Slightly larger for a friendlier feel */
-  font-weight: 700;
-  margin-bottom: 20px;
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive; /* Playful font */
-  color: #ff6f91; /* Warm, soft pink */
+  font-size: 32px; /* Enhanced size for better focus */
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-family: 'Comic Sans MS', cursive; /* Playful font */
+  color: #ff758f; /* Slightly warmer pink */
 }
 
 .header-highlight {
-  color: #fff99e; /* Soft pastel yellow */
+  color: #fffac0; /* Softer pastel yellow for harmony */
 }
 
 /* Subheader Section */
@@ -28,35 +28,42 @@
   justify-content: space-between;
   align-items: center;
   width: 90%;
-  font-size: 18px; /* Slightly smaller for balance */
-  font-weight: 600;
-  color: #ff6f91;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff758f;
 }
 
 .subheader-user {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 900;
-  font-family: 'Comic Sans MS', cursive; /* Consistent with playful theme */
+  gap: 8px;
+  font-weight: bold;
+  font-family: 'Comic Sans MS', cursive; /* Consistency in style */
 }
 
 .subheader-balance {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: 900;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.subheader-balance:hover {
+  color: #e63950; /* Deeper red for hover effect */
+  transform: scale(1.05); /* Slight hover scale */
 }
 
 .balance-icon-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  background-color: #ffeaa7; /* Lighter yellow */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  background-color: #fffac0; /* Soft yellow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 /* Welcome Section */
@@ -66,38 +73,37 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 80px;
-  margin-top: 30px;
-  gap: 20px;
-  border-top: 3px dashed #fff99e; /* Dashed border for a playful touch */
+  padding: 60px 0 30px;
+  gap: 15px;
+  border-top: 3px dashed #fffac0; /* Playful dashed border */
   border-radius: 30px 30px 0 0;
-  background-color: #ffe4ec; /* Soft pastel pink for contrast */
+  background-color: #ffeef5; /* Softer pastel pink */
 }
 
 .image-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  background-color: #fff99e;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Softer shadow for a cute pop */
+  background-color: #fffac0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
 }
 
 .welcome-image {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); /* Subtle shadow for cuteness */
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)); /* Subtle shadow */
 }
 
 .welcome-text {
-  color: #ff6f91;
+  color: #ff758f;
   text-align: center;
-  font-size: 18px; /* Slightly smaller for softness */
+  font-size: 18px;
   font-weight: 500;
-  width: 80%;
+  width: 85%;
   margin: 0;
   font-family: 'Comic Sans MS', cursive;
 }
@@ -107,23 +113,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px 20px; /* Slightly smaller padding for a compact look */
+  gap: 8px;
+  padding: 10px 20px;
   font-size: 18px;
-  font-weight: 900;
+  font-weight: bold;
   color: #1b1b1b;
-  background-color: #fff99e;
-  border-radius: 50px; /* Fully rounded button */
+  background-color: #fffac0;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  outline: none;
+  transition: all 0.3s ease;
   font-family: 'Comic Sans MS', cursive;
-  border: 2px solid #ff6f91; /* Pink border for added detail */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Cute, subtle shadow */
+  border: 2px solid #ff758f;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .start-button:hover {
-  background-color: #ff6f91;
+  background-color: #ff758f;
   color: #fff;
-  transform: translateY(-4px); /* Slightly bigger hover effect */
+  transform: translateY(-3px); /* Gentle hover effect */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced hover shadow */
 }
