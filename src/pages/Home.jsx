@@ -95,7 +95,7 @@ function Home() {
           <BarGraph limit={3} />
 
           {/* Add the new button */}
-          <a href="/">
+          <a href="/CrocodileMiniApp">
             <button className="start-button">
               Under development <FaArrowRightLong color="#1b1b1b" size={22} />
             </button>
