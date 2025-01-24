@@ -56,7 +56,7 @@ const WordScrambleGame = () => {
     }
   };
 
-  // Function to get the position of each character
+  // Function to get position of each character (circle) on the screen
   const getPosition = (index) => {
     const angle = (360 / scrambledWord.length) * index;
     const x = 100 + 80 * Math.cos((angle * Math.PI) / 180);
@@ -64,15 +64,24 @@ const WordScrambleGame = () => {
     return { x, y };
   };
 
-  // Create a line path based on selected indices
+  // Function to create a smooth curved line connecting the circles
   const createLinePath = () => {
     if (selectedIndices.length < 2) return ""; // Only draw line if more than 1 character is selected
 
+    // Start the path from the first point
     let path = `M ${getPosition(selectedIndices[0]).x} ${getPosition(selectedIndices[0]).y}`;
-    selectedIndices.forEach((index) => {
-      const { x, y } = getPosition(index);
-      path += ` L ${x} ${y}`;
-    });
+
+    // Loop through selected indices and add smooth Bezier curve commands
+    for (let i = 0; i < selectedIndices.length - 1; i++) {
+      const { x: x1, y: y1 } = getPosition(selectedIndices[i]);
+      const { x: x2, y: y2 } = getPosition(selectedIndices[i + 1]);
+
+      // Control points for Bezier curve
+      const cx1 = x1 + (x2 - x1) / 2;
+      const cy1 = y1 + (y2 - y1) / 2;
+
+      path += ` C ${cx1} ${cy1}, ${cx1} ${cy1}, ${x2} ${y2}`;
+    }
 
     return path;
   };
@@ -98,16 +107,22 @@ const WordScrambleGame = () => {
           <svg
             width="200"
             height="200"
-            className="absolute top-0 left-0"
             style={{
               pointerEvents: "none", // Don't interfere with mouse/touch events
             }}
           >
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style={{ stopColor: "#ff7e5f", stopOpacity: 1 }} />
+                <stop offset="100%" style={{ stopColor: "#feb47b", stopOpacity: 1 }} />
+              </linearGradient>
+            </defs>
             <path
               d={createLinePath()}
-              stroke="rgba(0, 0, 0, 0.5)"
-              strokeWidth="2"
+              stroke="url(#gradient)"
+              strokeWidth="3"
               fill="transparent"
+              filter="drop-shadow(0 0 10px rgba(0, 0, 0, 0.5))"
             />
           </svg>
 
