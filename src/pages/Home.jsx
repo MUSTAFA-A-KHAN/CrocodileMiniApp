@@ -95,9 +95,9 @@ function Home() {
           <BarGraph limit={3} />
 
           {/* Add the new button */}
-          <a href="/CrocodileMiniApp">
+          <a href="/CrocodileMiniApp/wordScramble">
             <button className="start-button">
-              Under development <FaArrowRightLong color="#1b1b1b" size={22} />
+              Scramble Game <FaArrowRightLong color="#1b1b1b" size={22} />
             </button>
           </a>
         </div>
