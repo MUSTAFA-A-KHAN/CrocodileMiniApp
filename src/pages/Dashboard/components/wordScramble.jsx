@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from "react";
 
 const WordScrambleGame = () => {
-  const words = ["circle", "react", "puzzle", "design", "tailwind"];
+  const [words, setWords] = useState([]);
   const [scrambledWord, setScrambledWord] = useState([]);
   const [originalWord, setOriginalWord] = useState("");
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    startGame();
+    fetchWords();
   }, []);
+
+  const fetchWords = async () => {
+    try {
+      const response = await fetch("https://raw.githubusercontent.com/MUSTAFA-A-KHAN/json-data-hub/refs/heads/main/words.json");
+      const data = await response.json();
+      setWords(data.commonWords);
+      startGame(data.commonWords);
+    } catch (error) {
+      console.error("Error fetching words:", error);
+    }
+  };
 
   const shuffleWord = (word) => {
     return word.split("").sort(() => Math.random() - 0.5);
   };
 
-  const startGame = () => {
+  const startGame = (words) => {
     const word = words[Math.floor(Math.random() * words.length)];
     setOriginalWord(word);
     setScrambledWord(shuffleWord(word));
@@ -162,7 +173,7 @@ const WordScrambleGame = () => {
         </div>
         <div className="mt-6">
           <button
-            onClick={startGame}
+            onClick={() => startGame(words)}
             className="bg-pink-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-pink-600 transform transition-all duration-300 ease-in-out"
           >
             🌟 Restart 🌟
