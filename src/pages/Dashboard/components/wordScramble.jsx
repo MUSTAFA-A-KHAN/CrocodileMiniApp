@@ -7,6 +7,7 @@ const WordScrambleGame = () => {
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [message, setMessage] = useState("");
   const [hint, setHint] = useState("");
+  const [audioUrl, setAudioUrl] = useState(""); // To store pronunciation audio URL
 
   useEffect(() => {
     fetchWords();
@@ -36,6 +37,7 @@ const WordScrambleGame = () => {
     setSelectedIndices([]);
     setMessage("");
     setHint("");
+    setAudioUrl(""); // Reset audio URL when a new word is loaded
   };
 
   const reshuffleWord = () => {
@@ -43,9 +45,11 @@ const WordScrambleGame = () => {
     setSelectedIndices([]);
     setMessage("");
     setHint("");
+    setAudioUrl(""); // Reset audio URL
   };
 
   const fetchHint = async () => {
+    
     try {
       const response = await fetch(
         `https://api.dictionaryapi.dev/api/v2/entries/en/${originalWord}`
@@ -61,11 +65,28 @@ const WordScrambleGame = () => {
       } else {
         setHint("No hint available.");
       }
+      const audio = data[0]?.phonetics?.find(phonetic => phonetic.audio)?.audio || "";
+      setAudioUrl(audio); 
+
+      setHint(hintData);// Set audio URL for pronunciation
     } catch (error) {
-      setHint("Unable to fetch hint.");
+    //   setHint("Unable to fetch hint.");
       console.error("Error fetching hint:", error);
-      setHint("Error fetching hint.");
     }
+    
+    
+  };
+
+  const playAudio = () => {
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  };
+  const playSuccessAudio = (containedaudio) => {
+    
+      const audio = new Audio(containedaudio);
+      audio.play();
   };
 
   const handleTouchMove = (event) => {
@@ -95,8 +116,10 @@ const WordScrambleGame = () => {
   const handleMouseUp = () => {
     const formedWord = selectedIndices.map((i) => scrambledWord[i]).join("");
     if (formedWord === originalWord) {
+      playSuccessAudio("https://cdn.pixabay.com/download/audio/2023/10/18/audio_29c8b4314c.mp3?filename=congratulations-deep-voice-172193.mp3");
       setMessage("🎉 Correct!");
     } else {
+        playSuccessAudio("https://cdn.pixabay.com/download/audio/2022/11/21/audio_136661e554.mp3?filename=error-126627.mp3");
       setMessage("❌ Try Again!");
     }
   };
@@ -223,9 +246,18 @@ const WordScrambleGame = () => {
           >
             💡 Hint
           </button>
+          {audioUrl && (
+            <button
+              onClick={playAudio}
+              className="bg-purple-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-600 transform transition-all duration-300 ease-in-out"
+            >
+              🔊 Pronunciation
+            </button>
+          )}
         </div>
         {message && (
           <p className="mt-4 text-2xl font-semibold text-white">{message}</p>
+        
         )}
         {hint && (
           <p className="mt-4 text-xl text-white bg-gray-800 p-4 rounded-md shadow-md">
