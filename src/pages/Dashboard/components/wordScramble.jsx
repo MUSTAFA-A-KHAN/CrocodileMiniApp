@@ -6,6 +6,7 @@ const WordScrambleGame = () => {
   const [originalWord, setOriginalWord] = useState("");
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [message, setMessage] = useState("");
+  const [hint, setHint] = useState("");
 
   useEffect(() => {
     fetchWords();
@@ -13,7 +14,9 @@ const WordScrambleGame = () => {
 
   const fetchWords = async () => {
     try {
-      const response = await fetch("https://raw.githubusercontent.com/MUSTAFA-A-KHAN/json-data-hub/refs/heads/main/words.json");
+      const response = await fetch(
+        "https://raw.githubusercontent.com/MUSTAFA-A-KHAN/json-data-hub/refs/heads/main/words.json"
+      );
       const data = await response.json();
       setWords(data.commonWords);
       startGame(data.commonWords);
@@ -32,6 +35,29 @@ const WordScrambleGame = () => {
     setScrambledWord(shuffleWord(word));
     setSelectedIndices([]);
     setMessage("");
+    setHint("");
+  };
+
+  const fetchHint = async () => {
+    try {
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${originalWord}`
+      );
+      const data = await response.json();
+      if (data && data[0]) {
+        const phonetic = data[0].phonetic || "No phonetic available";
+        const meanings =
+          data[0].meanings.length > 0
+            ? data[0].meanings.map((m) => m.definitions[0].definition).join(", ")
+            : "No definitions available";
+        setHint(`Phonetic: ${phonetic}, Meaning: ${meanings}`);
+      } else {
+        setHint("No hint available.");
+      }
+    } catch (error) {
+      console.error("Error fetching hint:", error);
+      setHint("Error fetching hint.");
+    }
   };
 
   const handleTouchMove = (event) => {
@@ -178,9 +204,20 @@ const WordScrambleGame = () => {
           >
             🌟 Restart 🌟
           </button>
+          <button
+            onClick={fetchHint}
+            className="ml-4 bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-600 transform transition-all duration-300 ease-in-out"
+          >
+            🔍 Hint 🔍
+          </button>
         </div>
         {message && (
           <p className="mt-4 text-2xl font-semibold text-white">{message}</p>
+        )}
+        {hint && (
+          <p className="mt-4 text-xl text-white bg-gray-800 p-4 rounded-md shadow-md">
+            {hint}
+          </p>
         )}
         <div className="mt-4 text-gray-200 text-lg">
           Selected Word:{" "}
