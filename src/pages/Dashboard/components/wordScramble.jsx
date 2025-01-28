@@ -38,6 +38,13 @@ const WordScrambleGame = () => {
     setHint("");
   };
 
+  const reshuffleWord = () => {
+    setScrambledWord(shuffleWord(originalWord));
+    setSelectedIndices([]);
+    setMessage("");
+    setHint("");
+  };
+
   const fetchHint = async () => {
     try {
       const response = await fetch(
@@ -55,6 +62,7 @@ const WordScrambleGame = () => {
         setHint("No hint available.");
       }
     } catch (error) {
+      setHint("Unable to fetch hint.");
       console.error("Error fetching hint:", error);
       setHint("Error fetching hint.");
     }
@@ -93,7 +101,6 @@ const WordScrambleGame = () => {
     }
   };
 
-  // Function to get position of each character (circle) on the screen
   const getPosition = (index) => {
     const angle = (360 / scrambledWord.length) * index;
     const x = 100 + 80 * Math.cos((angle * Math.PI) / 180);
@@ -197,18 +204,24 @@ const WordScrambleGame = () => {
             );
           })}
         </div>
-        <div className="mt-6">
+        <div className="mt-6 flex gap-4">
           <button
-            onClick={() => startGame(words)}
+            onClick={reshuffleWord}
             className="bg-pink-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-pink-600 transform transition-all duration-300 ease-in-out"
           >
-            🌟 Restart 🌟
+            🔄 Retry
+          </button>
+          <button
+            onClick={() => startGame(words)}
+            className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-600 transform transition-all duration-300 ease-in-out"
+          >
+            ⏭️ Next/Skip
           </button>
           <button
             onClick={fetchHint}
-            className="ml-4 bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-600 transform transition-all duration-300 ease-in-out"
+            className="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transform transition-all duration-300 ease-in-out"
           >
-            🔍 Hint 🔍
+            💡 Hint
           </button>
         </div>
         {message && (
