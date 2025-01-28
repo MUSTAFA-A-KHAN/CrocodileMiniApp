@@ -42,6 +42,8 @@ const WordScrambleGame = () => {
     setAudioUrl(""); // Reset audio URL when a new word is loaded
     // Prevent audio from playing on reshuffle
   setAudioPlayed(false);
+
+  setSelectedIndices([]);
   };
 
   const reshuffleWord = () => {
@@ -120,6 +122,9 @@ const WordScrambleGame = () => {
   };
 
   const handleMouseUp = () => {
+    if (selectedIndices.length === 0) {
+        return;
+      }
     const formedWord = selectedIndices.map((i) => scrambledWord[i]).join("");
     if (formedWord === originalWord) {
         if (!audioPlayed) {
