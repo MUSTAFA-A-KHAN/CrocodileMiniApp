@@ -8,6 +8,8 @@ const WordScrambleGame = () => {
   const [message, setMessage] = useState("");
   const [hint, setHint] = useState("");
   const [audioUrl, setAudioUrl] = useState(""); // To store pronunciation audio URL
+  const [audioPlayed, setAudioPlayed] = useState(false);
+
 
   useEffect(() => {
     fetchWords();
@@ -38,6 +40,8 @@ const WordScrambleGame = () => {
     setMessage("");
     setHint("");
     setAudioUrl(""); // Reset audio URL when a new word is loaded
+    // Prevent audio from playing on reshuffle
+  setAudioPlayed(false);
   };
 
   const reshuffleWord = () => {
@@ -46,6 +50,8 @@ const WordScrambleGame = () => {
     setMessage("");
     setHint("");
     setAudioUrl(""); // Reset audio URL
+    // Prevent audio from playing on reshuffle
+  setAudioPlayed(false);
   };
 
   const fetchHint = async () => {
@@ -116,12 +122,19 @@ const WordScrambleGame = () => {
   const handleMouseUp = () => {
     const formedWord = selectedIndices.map((i) => scrambledWord[i]).join("");
     if (formedWord === originalWord) {
+        if (!audioPlayed) {
       playSuccessAudio("https://cdn.pixabay.com/download/audio/2023/10/18/audio_29c8b4314c.mp3?filename=congratulations-deep-voice-172193.mp3");
       setMessage("🎉 Correct!");
+      setAudioPlayed(true); 
+         } // Mark audio as played
+
     } else {
+        if (!audioPlayed) {
         playSuccessAudio("https://cdn.pixabay.com/download/audio/2022/11/21/audio_136661e554.mp3?filename=error-126627.mp3");
       setMessage("❌ Try Again!");
-    }
+      setAudioPlayed(true);  // Mark audio as played
+
+    }}
   };
 
   const getPosition = (index) => {
