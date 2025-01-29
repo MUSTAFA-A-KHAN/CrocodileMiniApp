@@ -2,18 +2,15 @@ import React, { useState, useEffect } from "react";
 import BarGraph from "./Dashboard/components/BarGraph"; // Import the BarGraph component
 import "../assets/styles/home.css";
 import welcome from "../assets/images/welcome.png";
-import { FaEthereum, FaArrowRightLong } from "react-icons/fa6"; // Import FaArrowRightLong
-import { PiBirdFill } from "react-icons/pi";
+import { FaArrowRightLong } from "react-icons/fa6"; // Import FaArrowRightLong
 import { useAccount } from "../hooks/useAccount";
 import axios from "axios";
 import Header from "./Dashboard/components/Header"; // Import the Header component
+import SubHeader from "./Dashboard/components/SubHeader"; // Import the SubHeader component
+
 function Home() {
-  const [isHovered, setIsHovered] = useState(false);
   const [userData, setUserData] = useState([]);
   const { userName, userID, photo_url } = useAccount();
-
-
-  
 
   // Fetch data on component mount
   useEffect(() => {
@@ -42,43 +39,8 @@ function Home() {
   return (
     <>
       <div className="app-container">
-      <Header /> {/* Reusable Header */}
-
-        <div className="subheader-container">
-          <span className="subheader-user">
-            <PiBirdFill /> @{userName}
-          </span>
-          <span
-            className="subheader-balance"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <div className="balance-icon-container">
-              <img
-                src={photo_url}
-                alt={`${userName}'s avatar`}
-                className="balance-icon-container"
-              />
-              <FaEthereum color="#fff" />
-            </div>
-            ShowStats
-            {/* Show stats on hover */}
-            {isHovered && userData.length > 0 && (
-              <div className="stats-popup">
-                <h3>User Stats:</h3>
-                <ul>
-                  {userData.map((user) => (
-                    <li key={user._id}>
-                      <strong>Name:</strong> {user.Name} <br />
-                      <strong>Count:</strong> {user.count}<br />
-                      <strong>Rank:</strong> {user.rank}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </span>
-        </div>
+        <Header /> {/* Reusable Header */}
+        <SubHeader userName={userName} photo_url={photo_url} userData={userData} /> {/* Reusable SubHeader */}
 
         <div className="welcome-section">
           <div className="image-wrapper">

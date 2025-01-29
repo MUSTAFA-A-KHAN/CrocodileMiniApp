@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../../../assets/styles/wordScramble.css"; // Import the CSS file
+import SubHeader from "./SubHeader"
+import { useAccount } from "../../../hooks/useAccount"; // Import useAccount
+import axios from "axios"; // Import axios for API calls
 
 const WordScrambleGame = () => {
   const [words, setWords] = useState([]);
@@ -11,6 +14,30 @@ const WordScrambleGame = () => {
   const [audioUrl, setAudioUrl] = useState(""); // To store pronunciation audio URL
   const [audioPlayed, setAudioPlayed] = useState(false);
 
+  const { userName, userID, photo_url } = useAccount(); // Fetch user data
+  const [userData, setUserData] = useState([]);
+
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!userID) {
+        console.warn("User ID is not available.");
+        return;
+      }
+      try {
+        const response = await axios.get(
+          `https://crocodile-leaderboard-generator-production.up.railway.app/leaderboard?id=${userID}`
+        );
+        setUserData(response.data);
+      } catch (err) {
+        console.error("API Error:", err);
+      }
+    };
+
+    fetchUserData();
+  }, [userID]);
+
+  // Fetch words
   useEffect(() => {
     fetchWords();
   }, []);
@@ -170,6 +197,7 @@ const WordScrambleGame = () => {
         <span className="header-highlight">Cr</span>ocodile Ga
         <span className="header-highlight">me</span> Engine
       </header>
+      <SubHeader userName={userName} photo_url={photo_url} userData={userData} /> {/* Add SubHeader here */}
       <div
         className="welcome-section"
         onTouchMove={handleTouchMove}
