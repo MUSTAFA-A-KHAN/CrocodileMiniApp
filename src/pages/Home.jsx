@@ -51,7 +51,7 @@ function Home() {
           </p>
 
           {/* Add the top 3 leaderboard */}
-          <BarGraph limit={5} showHeader={false} /> {/* showHeader is true by default */}
+          <BarGraph limit={3} showHeader={false} /> {/* showHeader is true by default */}
 
           {/* Add the new button */}
           <a href="/CrocodileMiniApp/wordScramble">

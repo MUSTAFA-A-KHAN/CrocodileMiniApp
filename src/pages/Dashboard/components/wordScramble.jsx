@@ -3,6 +3,7 @@ import "../../../assets/styles/wordScramble.css"; // Import the CSS file
 import SubHeader from "./SubHeader"
 import { useAccount } from "../../../hooks/useAccount"; // Import useAccount
 import axios from "axios"; // Import axios for API calls
+import Header from "./Header"; 
 
 const WordScrambleGame = () => {
   const [words, setWords] = useState([]);
@@ -193,10 +194,7 @@ const WordScrambleGame = () => {
 
   return (
     <div className="app-container">
-      <header className="header-title">
-        <span className="header-highlight">Cr</span>ocodile Ga
-        <span className="header-highlight">me</span> Engine
-      </header>
+      <Header /> {/* Reusable Header */}
       <SubHeader userName={userName} photo_url={photo_url} userData={userData} /> {/* Add SubHeader here */}
       <div
         className="welcome-section"
