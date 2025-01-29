@@ -171,7 +171,7 @@ const WordScrambleGame = () => {
         <span className="header-highlight">me</span> Engine
       </header>
       <div
-        className="subheader-scramble-container"
+        className="welcome-section"
         onTouchMove={handleTouchMove}
         onMouseUp={handleMouseUp}
         onTouchEnd={handleMouseUp}
