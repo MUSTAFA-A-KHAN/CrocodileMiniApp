@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../../../assets/styles/wordScramble.css"; // Import the CSS file
 
 const WordScrambleGame = () => {
   const [words, setWords] = useState([]);
@@ -9,7 +10,6 @@ const WordScrambleGame = () => {
   const [hint, setHint] = useState("");
   const [audioUrl, setAudioUrl] = useState(""); // To store pronunciation audio URL
   const [audioPlayed, setAudioPlayed] = useState(false);
-
 
   useEffect(() => {
     fetchWords();
@@ -40,10 +40,7 @@ const WordScrambleGame = () => {
     setMessage("");
     setHint("");
     setAudioUrl(""); // Reset audio URL when a new word is loaded
-    // Prevent audio from playing on reshuffle
-  setAudioPlayed(false);
-
-  setSelectedIndices([]);
+    setAudioPlayed(false); // Prevent audio from playing on reshuffle
   };
 
   const reshuffleWord = () => {
@@ -52,12 +49,10 @@ const WordScrambleGame = () => {
     setMessage("");
     setHint("");
     setAudioUrl(""); // Reset audio URL
-    // Prevent audio from playing on reshuffle
-  setAudioPlayed(false);
+    setAudioPlayed(false); // Prevent audio from playing on reshuffle
   };
 
   const fetchHint = async () => {
-    
     try {
       const response = await fetch(
         `https://api.dictionaryapi.dev/api/v2/entries/en/${originalWord}`
@@ -73,16 +68,11 @@ const WordScrambleGame = () => {
       } else {
         setHint("No hint available.");
       }
-      const audio = data[0]?.phonetics?.find(phonetic => phonetic.audio)?.audio || "";
-      setAudioUrl(audio); 
-
-      setHint(hintData);// Set audio URL for pronunciation
+      const audio = data[0]?.phonetics?.find((phonetic) => phonetic.audio)?.audio || "";
+      setAudioUrl(audio); // Set audio URL for pronunciation
     } catch (error) {
-    //   setHint("Unable to fetch hint.");
       console.error("Error fetching hint:", error);
     }
-    
-    
   };
 
   const playAudio = () => {
@@ -91,10 +81,10 @@ const WordScrambleGame = () => {
       audio.play();
     }
   };
+
   const playSuccessAudio = (containedaudio) => {
-    
-      const audio = new Audio(containedaudio);
-      audio.play();
+    const audio = new Audio(containedaudio);
+    audio.play();
   };
 
   const handleTouchMove = (event) => {
@@ -123,23 +113,26 @@ const WordScrambleGame = () => {
 
   const handleMouseUp = () => {
     if (selectedIndices.length === 0) {
-        return;
-      }
+      return;
+    }
     const formedWord = selectedIndices.map((i) => scrambledWord[i]).join("");
     if (formedWord === originalWord) {
-        if (!audioPlayed) {
-      playSuccessAudio("https://cdn.pixabay.com/download/audio/2023/10/18/audio_29c8b4314c.mp3?filename=congratulations-deep-voice-172193.mp3");
-      setMessage("🎉 Correct!");
-      setAudioPlayed(true); 
-         } // Mark audio as played
-
+      if (!audioPlayed) {
+        playSuccessAudio(
+          "https://cdn.pixabay.com/download/audio/2023/10/18/audio_29c8b4314c.mp3?filename=congratulations-deep-voice-172193.mp3"
+        );
+        setMessage("🎉 Correct!");
+        setAudioPlayed(true); // Mark audio as played
+      }
     } else {
-        if (!audioPlayed) {
-        playSuccessAudio("https://cdn.pixabay.com/download/audio/2022/11/21/audio_136661e554.mp3?filename=error-126627.mp3");
-      setMessage("❌ Try Again!");
-      setAudioPlayed(true);  // Mark audio as played
-
-    }}
+      if (!audioPlayed) {
+        playSuccessAudio(
+          "https://cdn.pixabay.com/download/audio/2022/11/21/audio_136661e554.mp3?filename=error-126627.mp3"
+        );
+        setMessage("❌ Try Again!");
+        setAudioPlayed(true); // Mark audio as played
+      }
+    }
   };
 
   const getPosition = (index) => {
@@ -178,7 +171,7 @@ const WordScrambleGame = () => {
         <span className="header-highlight">me</span> Engine
       </header>
       <div
-        className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-pink-300 to-indigo-300 subheader-container"
+        className="subheader-scramble-container"
         onTouchMove={handleTouchMove}
         onMouseUp={handleMouseUp}
         onTouchEnd={handleMouseUp}
@@ -218,23 +211,10 @@ const WordScrambleGame = () => {
               <div
                 key={index}
                 data-index={index}
-                className="absolute transform transition-all duration-300 ease-in-out"
+                className={`circle ${selectedIndices.includes(index) ? "selected" : ""}`}
                 style={{
                   left: `${x}px`,
                   top: `${y}px`,
-                  width: "50px",
-                  height: "50px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: selectedIndices.includes(index)
-                    ? "#4CAF50"
-                    : "#FFC107",
-                  color: "white",
-                  borderRadius: "50%",
-                  cursor: "pointer",
-                  userSelect: "none",
-                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                 }}
                 onMouseDown={() => handleMouseDown(index)}
                 onMouseOver={() => handleMouseOver(index)}
@@ -246,45 +226,25 @@ const WordScrambleGame = () => {
           })}
         </div>
         <div className="mt-6 flex gap-4">
-          <button
-            onClick={reshuffleWord}
-            className="bg-pink-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-pink-600 transform transition-all duration-300 ease-in-out"
-          >
+          <button onClick={reshuffleWord} className="button retry">
             🔄 Retry
           </button>
-          <button
-            onClick={() => startGame(words)}
-            className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-600 transform transition-all duration-300 ease-in-out"
-          >
+          <button onClick={() => startGame(words)} className="button next">
             ⏭️ Next/Skip
           </button>
-          <button
-            onClick={fetchHint}
-            className="bg-green-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-600 transform transition-all duration-300 ease-in-out"
-          >
+          <button onClick={fetchHint} className="button hint">
             💡 Hint
           </button>
           {audioUrl && (
-            <button
-              onClick={playAudio}
-              className="bg-purple-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-600 transform transition-all duration-300 ease-in-out"
-            >
+            <button onClick={playAudio} className="button pronunciation">
               🔊 Pronunciation
             </button>
           )}
         </div>
-        {message && (
-          <p className="mt-4 text-2xl font-semibold text-white">{message}</p>
-        
-        )}
-        {hint && (
-          <p className="mt-4 text-xl text-white bg-gray-800 p-4 rounded-md shadow-md">
-            {hint}
-          </p>
-        )}
-        <div className="mt-4 text-gray-200 text-lg">
-          Selected Word:{" "}
-          {selectedIndices.map((i) => scrambledWord[i]).join("") || "None"}
+        {message && <p className="message">{message}</p>}
+        {hint && <p className="hint">{hint}</p>}
+        <div className="selected-word">
+          Selected Word: {selectedIndices.map((i) => scrambledWord[i]).join("") || "None"}
         </div>
       </div>
     </div>

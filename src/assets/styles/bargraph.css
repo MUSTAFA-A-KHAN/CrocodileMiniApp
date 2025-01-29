@@ -1,0 +1,13 @@
+/* Shared styles for the header */
+.header-title {
+    font-size: 2rem;
+    color: #fff;
+    text-align: center;
+    margin: 1rem 0;
+  }
+  
+  .header-highlight {
+    color: #f39c12;
+    font-weight: bold;
+  }
+  

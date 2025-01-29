@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 
+import Header from "./Header"; // Import the Header component
+import "../../../assets/styles/bargraph.css"; // Ensure you have relevant styles
+
 // BarGraph Component
-const BarGraph = ({ limit = 3 }) => {
+const BarGraph = ({ limit = 100, showHeader = true })=> {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -21,6 +24,8 @@ const BarGraph = ({ limit = 3 }) => {
   const topEntries = sortedData.slice(0, limit); // Get top N entries
 
   return (
+    <div className="bargraph-container">
+     {showHeader && <Header />} {/* Reusable Header */}
     <div className="leaderboard-section">
       <ul className="leaderboard-list mx-auto max-w-3xl bg-white rounded-3xl shadow-lg p-8">
         {topEntries.map((item, index) => (
@@ -58,6 +63,7 @@ const BarGraph = ({ limit = 3 }) => {
           </li>
         ))}
       </ul>
+    </div>
     </div>
   );
 };

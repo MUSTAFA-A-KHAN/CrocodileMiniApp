@@ -1,0 +1,151 @@
+/* WordScrambleGame.css */
+
+.app-container {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .header-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .header-highlight {
+    color: #ff7e5f;
+  }
+
+  .subheader-scramble-container {
+    min-height: 100vh; /* Ensures the container is at least the height of the viewport */
+    display: flex; 
+    width: 90%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #fbb1bd, #8a8dff); /* New gradient from pink-300 to indigo-300 */
+}
+  
+  .game-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .game-board {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .line-svg {
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+  }
+  
+  .circle {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFC107;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .circle.selected {
+    background-color: #4CAF50;
+  }
+  
+  .button-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  /* Shared styles for all buttons */
+.button {
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .button.retry {
+    background-color: #ff7e5f; /* Original background color */
+    background-color: #ec4899; /* New background color (pink-500) */
+    color: white; /* Text color */
+    padding: 0.75rem 1.5rem; /* px-6 py-3 (6 = 1.5rem, 3 = 0.75rem) */
+    border-radius: 9999px; /* rounded-full */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+    transition: all 0.3s ease-in-out; /* transform transition-all duration-300 ease-in-out */
+}
+
+.button.retry:hover {
+    background-color: #db2777; /* hover:bg-pink-600 */
+    transform: scale(1.05); /* Optional: Adds a slight scale effect on hover */
+}
+  
+
+.button:hover {
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+/* Specific styles for each button */
+.button.next {
+    background-color: #4CAF50; /* Original green color */
+}
+
+.button.next:hover {
+    background-color: #45a049; /* Darker green for hover */
+}
+
+.button.hint {
+    background-color: #2196F3; /* Original blue color */
+}
+
+.button.hint:hover {
+    background-color: #1e88e5; /* Darker blue for hover */
+}
+
+.button.pronunciation {
+    background-color: #9C27B0; /* Original purple color */
+}
+
+.button.pronunciation:hover {
+    background-color: #8e24aa; /* Darker purple for hover */
+}
+  
+  .message {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-top: 20px;
+  }
+  
+  .hint {
+    font-size: 1.2rem;
+    color: white;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .selected-word {
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 20px;
+  }

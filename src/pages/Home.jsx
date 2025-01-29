@@ -6,7 +6,7 @@ import { FaEthereum, FaArrowRightLong } from "react-icons/fa6"; // Import FaArro
 import { PiBirdFill } from "react-icons/pi";
 import { useAccount } from "../hooks/useAccount";
 import axios from "axios";
-
+import Header from "./Dashboard/components/Header"; // Import the Header component
 function Home() {
   const [isHovered, setIsHovered] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -42,10 +42,7 @@ function Home() {
   return (
     <>
       <div className="app-container">
-        <header className="header-title">
-          <span className="header-highlight">Cr</span>ocodile Ga
-          <span className="header-highlight">me</span> Engine
-        </header>
+      <Header /> {/* Reusable Header */}
 
         <div className="subheader-container">
           <span className="subheader-user">
@@ -92,7 +89,7 @@ function Home() {
           </p>
 
           {/* Add the top 3 leaderboard */}
-          <BarGraph limit={3} />
+          <BarGraph limit={5} showHeader={false} /> {/* showHeader is true by default */}
 
           {/* Add the new button */}
           <a href="/CrocodileMiniApp/wordScramble">
