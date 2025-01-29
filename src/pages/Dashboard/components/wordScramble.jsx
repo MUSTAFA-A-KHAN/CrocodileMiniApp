@@ -147,7 +147,7 @@ const WordScrambleGame = () => {
     if (formedWord === originalWord) {
       if (!audioPlayed) {
         playSuccessAudio(
-          "https://cdn.pixabay.com/download/audio/2023/10/18/audio_29c8b4314c.mp3?filename=congratulations-deep-voice-172193.mp3"
+          "https://cdn.pixabay.com/download/audio/2024/10/31/audio_9f88ea50ad.mp3?filename=coin-257878.mp3"
         );
         setMessage("🎉 Correct!");
         setAudioPlayed(true); // Mark audio as played
