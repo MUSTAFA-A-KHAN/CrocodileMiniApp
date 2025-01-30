@@ -65,7 +65,11 @@
   }
   
   .circle.selected {
-    background-color: #4CAF50;
+    background-color: #8e24aa;
+    transform: translate(0.1em, 0.1em);
+    border-color: #ff7e5f;
+    border-radius: 1svh;
+    background: fixed;
   }
   
   .button-container {

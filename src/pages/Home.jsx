@@ -55,9 +55,9 @@ function Home() {
 
           {/* Add the new button */}
           <a href="/CrocodileMiniApp/wordScramble">
-            <button className="start-button">
-              Scramble Game <FaArrowRightLong color="#1b1b1b" size={22} />
-            </button>
+          <button class="button">
+          <div><span>Start Crococdile</span></div>
+          </button>
           </a>
         </div>
       </div>
