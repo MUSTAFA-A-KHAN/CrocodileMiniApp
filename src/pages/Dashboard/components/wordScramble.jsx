@@ -4,6 +4,7 @@ import SubHeader from "./SubHeader"
 import { useAccount } from "../../../hooks/useAccount"; // Import useAccount
 import axios from "axios"; // Import axios for API calls
 import Header from "./Header"; 
+import Paper from "../../../assets/images/icegif-210.gif";
 
 const WordScrambleGame = () => {
   const [words, setWords] = useState([]);
@@ -17,6 +18,7 @@ const WordScrambleGame = () => {
 
   const { userName, userID, photo_url } = useAccount(); // Fetch user data
   const [userData, setUserData] = useState([]);
+  const [showGif, setShowGif] = useState(false);
 
   // Fetch user data
   useEffect(() => {
@@ -69,6 +71,7 @@ const WordScrambleGame = () => {
     setHint("");
     setAudioUrl(""); // Reset audio URL when a new word is loaded
     setAudioPlayed(false); // Prevent audio from playing on reshuffle
+    setShowGif(false);
   };
 
   const reshuffleWord = () => {
@@ -78,6 +81,7 @@ const WordScrambleGame = () => {
     setHint("");
     setAudioUrl(""); // Reset audio URL
     setAudioPlayed(false); // Prevent audio from playing on reshuffle
+    setShowGif(false);
   };
 
   const fetchHint = async () => {
@@ -151,13 +155,14 @@ const WordScrambleGame = () => {
         );
         setMessage("🎉 Correct!");
         setAudioPlayed(true); // Mark audio as played
+        setShowGif(true);
       }
     } else {
       if (!audioPlayed) {
         playSuccessAudio(
           "https://cdn.pixabay.com/download/audio/2022/11/21/audio_136661e554.mp3?filename=error-126627.mp3"
         );
-        setMessage("❌ Try Again!");
+        setMessage("❌ UH OH! Again?");
         setAudioPlayed(true); // Mark audio as played
       }
     }
@@ -229,10 +234,10 @@ const WordScrambleGame = () => {
               filter="drop-shadow(0 0 10px rgba(0, 0, 0, 0.5))"
             />
           </svg>
-
+  
           {scrambledWord.map((char, index) => {
             const { x, y } = getPosition(index);
-
+  
             return (
               <div
                 key={index}
@@ -273,6 +278,31 @@ const WordScrambleGame = () => {
           Selected Word: {selectedIndices.map((i) => scrambledWord[i]).join("") || "None"}
         </div>
       </div>
+  
+      {/* Full-screen transparent GIF overlay */}
+      {showGif && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 1000, // Ensure it's above everything else
+            pointerEvents: "none", // Allow clicks to pass through
+          }}
+        >
+          <img
+            src={Paper} // Path to your transparent GIF
+            alt="Success Animation"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover", // Ensure the GIF covers the entire screen
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
