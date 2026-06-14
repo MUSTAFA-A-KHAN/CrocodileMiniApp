@@ -20,6 +20,7 @@ const DATA_SOURCES = {
 };
 
 let currentData = null;
+let modifiedRecords = []; // Tracks only edited or newly added records
 let currentType = null;
 
 // --- 2. THREE.JS UNIVERSE SETUP ---
@@ -287,6 +288,7 @@ if (window.Telegram && window.Telegram.WebApp) {
 // --- 5. DATA TERMINAL LOGIC ---
 const terminal = document.getElementById('data-terminal');
 const closeBtn = document.getElementById('close-terminal');
+const saveBtn = document.getElementById('save-terminal');
 const searchInput = document.getElementById('terminal-search');
 const container = document.getElementById('data-container');
 const loading = document.getElementById('loading');
@@ -306,6 +308,44 @@ closeBtn.addEventListener('click', () => {
     terminal.classList.add('hidden');
     container.innerHTML = '';
     searchInput.value = '';
+    saveBtn.classList.add('hidden');
+});
+
+saveBtn.addEventListener('click', () => {
+    if (!currentData || modifiedRecords.length === 0) {
+        alert("No modifications made yet.");
+        return;
+    }
+
+    const modifiedStr = JSON.stringify(modifiedRecords, null, 2);
+
+    // 1. Download full file to user device (optional backup)
+    try {
+        const fullDataStr = JSON.stringify(currentData, null, 2);
+        const blob = new Blob([fullDataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "updated_data.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch(e) {}
+
+    // 2. Open chat with @MustafaAkhan with the modified data as text
+    if (window.Telegram && window.Telegram.WebApp) {
+        const encodedText = encodeURIComponent(`Here are my data updates:\n\n${modifiedStr}`);
+        const tgUrl = `https://t.me/MustafaAkhan?text=${encodedText}`;
+
+        try {
+            window.Telegram.WebApp.openTelegramLink(tgUrl);
+        } catch (e) {
+            console.error("Failed to open telegram link", e);
+            // Fallback if openTelegramLink is restricted
+            window.open(tgUrl, '_blank');
+        }
+    }
 });
 
 searchInput.addEventListener('input', (e) => {
@@ -327,9 +367,12 @@ async function loadData(source) {
 
         if (source.type === 'json') {
             currentData = await response.json();
+            modifiedRecords = []; // Reset modifications on load
+            saveBtn.classList.remove('hidden'); // Show save button for JSON edits
         } else {
             const text = await response.text();
             currentData = text.split(/\r?\n/).filter(line => line.trim() !== '');
+            saveBtn.classList.add('hidden'); // Hide for plain text currently
         }
 
         searchInput.disabled = false;
@@ -418,13 +461,26 @@ function renderJson(query) {
         });
 
         if (hasImage || (headers.size > 0 && headers.size < 10)) {
+            // Add New Record Button
+            const addBtn = document.createElement('button');
+            addBtn.className = 'add-record-btn';
+            addBtn.textContent = '+ ADD NEW RECORD';
+            addBtn.addEventListener('click', () => {
+                const newRecord = {};
+                headers.forEach(h => newRecord[h] = '');
+                currentData.unshift(newRecord); // Add to beginning
+                modifiedRecords.push(newRecord); // Track addition
+                renderData(''); // Re-render grid
+            });
+            container.appendChild(addBtn);
+
             const grid = document.createElement('div');
             grid.className = 'card-grid';
 
             const maxItems = hasImage ? 100 : 500; // Limit cards to avoid performance issues
             const itemsToRender = dataToRender.slice(0, maxItems);
 
-            itemsToRender.forEach(item => {
+            itemsToRender.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = 'data-card';
 
@@ -440,8 +496,10 @@ function renderJson(query) {
                 const content = document.createElement('div');
                 content.className = 'card-content';
 
+                const rows = [];
+                let isEditing = false;
+
                 headers.forEach(h => {
-                    if (h === 'image_url') return; // Skip rendering URL as text
                     const val = item[h];
                     if (val !== undefined) {
                         const row = document.createElement('div');
@@ -453,18 +511,85 @@ function renderJson(query) {
 
                         const valueSpan = document.createElement('span');
                         valueSpan.className = 'card-value';
-                        valueSpan.textContent = typeof val === 'object' ? JSON.stringify(val) : val;
+                        if (h === 'image_url') {
+                             valueSpan.textContent = "[IMAGE HIDDEN]"; // Hide URL text to prevent layout breaks, image already rendered above
+                        } else {
+                             valueSpan.textContent = typeof val === 'object' ? JSON.stringify(val) : val;
+                        }
+
+                        // Create Input Field for Editing (hidden initially)
+                        const inputField = document.createElement('input');
+                        inputField.className = 'edit-input hidden';
+                        inputField.type = 'text';
+                        inputField.value = typeof val === 'object' ? JSON.stringify(val) : val;
 
                         row.appendChild(labelSpan);
-                        // Add a small space between label and value
                         row.appendChild(document.createTextNode(' '));
                         row.appendChild(valueSpan);
+                        row.appendChild(inputField);
+
+                        // Hide the static image_url row so it doesn't clutter the card, but allow it to be edited
+                        if (h === 'image_url') {
+                            row.classList.add('hidden');
+                        }
 
                         content.appendChild(row);
+                        rows.push({ h, row, valueSpan, inputField, val });
+                    }
+                });
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.textContent = 'EDIT RECORD';
+                editBtn.addEventListener('click', () => {
+                    isEditing = !isEditing;
+                    if (isEditing) {
+                        editBtn.textContent = 'SAVE RECORD';
+                        rows.forEach(r => {
+                            if (r.h === 'image_url') {
+                                r.row.classList.remove('hidden'); // Show the row so user can edit the url
+                            }
+                            r.valueSpan.classList.add('hidden');
+                            r.inputField.classList.remove('hidden');
+                        });
+                    } else {
+                        editBtn.textContent = 'EDIT RECORD';
+                        rows.forEach(r => {
+                            let newVal = r.inputField.value;
+                            // Attempt to parse back to object if original was object or boolean
+                            if (typeof r.val === 'object') {
+                                try { newVal = JSON.parse(newVal); } catch(e){}
+                            } else if (typeof r.val === 'boolean') {
+                                newVal = newVal.toLowerCase() === 'true';
+                            } else if (typeof r.val === 'number') {
+                                newVal = Number(newVal) || newVal;
+                            }
+
+                            // Update display and currentData memory model
+                            if (r.h === 'image_url') {
+                                r.valueSpan.textContent = "[IMAGE HIDDEN]";
+                                r.row.classList.add('hidden'); // Hide it again from static view
+                            } else {
+                                r.valueSpan.textContent = typeof newVal === 'object' ? JSON.stringify(newVal) : newVal;
+                            }
+                            item[r.h] = newVal;
+
+                            r.valueSpan.classList.remove('hidden');
+                            r.inputField.classList.add('hidden');
+                        });
+
+                        // Track the modified record
+                        if (!modifiedRecords.includes(item)) {
+                            modifiedRecords.push(item);
+                        }
+
+                        // Briefly Re-render data so updated image URLs refresh immediately
+                        setTimeout(() => renderData(''), 50);
                     }
                 });
 
                 card.appendChild(content);
+                card.appendChild(editBtn);
                 grid.appendChild(card);
             });
 
